@@ -1,5 +1,6 @@
 package Apllication;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.TreeSet;
 
@@ -7,11 +8,11 @@ public class Manager extends Employee {
     TreeSet<Request<Job, User>> jobApplications;
     public Manager() {
         super();
-//        /*
-//        I use TreeSet because i can add elements
-//        without having to sort them every time
-//        by making a custom comparator
-//        */
+        /*
+        I use TreeSet because i can add elements
+        without having to sort them every time
+        by making a custom comparator
+        */
         jobApplications = new TreeSet<>();
     }
     public void add(Request<Job, User> request) {
@@ -30,7 +31,6 @@ public class Manager extends Employee {
         return String.valueOf(stringAux);
     }
     public void process(Job job) {
-
         Application app = Application.getInstance();
         ArrayList<Request<Job, User>> lista_cereri = new ArrayList<>();
         Employee employee;
@@ -38,20 +38,31 @@ public class Manager extends Employee {
 
         for(Request<Job, User> request : jobApplications)
             if(request.getKey().equals(job)) {
-//                System.out.println(job.nameOfJob+"\n"+request.getValue1()+" "+companyName+" "+request.getValue1().getTotalScore());
+
                 lista_cereri.add(request);
                 if(request.getKey().noPositions > 0
                         && request.getKey().flag == 1) {
                     if(app.userList.contains(request.getValue1())) {
 
                         employee = request.getValue1().convert();
+
+                        employee.salary = request.getKey().salary;
+                        employee.companyName = companyName;
+
+                        employee.add(new Experience(LocalDate.now().getDayOfMonth()
+                                + "." + LocalDate.now().getMonthValue() + "."
+                                + LocalDate.now().getYear(),
+                                null, job.nameOfJob, companyName));
+
                         company.add(employee, company.getDepartment
                                 ("Apllication.Departamente.IT"));
                         job.noPositions--;
                         job.userArrayList.remove(request.getValue1());
 
-                        for (Company company1 : app.companyList)
+                        for (Company company1 : app.companyList){
                             company1.removeObserver(request.getValue1());
+                            request.getValue1().update("U are the chosen one! "+companyName);
+                        }
                     }
                 }
             }

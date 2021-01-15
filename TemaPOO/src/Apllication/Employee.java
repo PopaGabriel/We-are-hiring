@@ -1,13 +1,13 @@
 package Apllication;
 
+import java.util.ArrayList;
+
 public class Employee extends User {
     public String companyName;
-    public Integer salary;
+    public Double salary;
 
     public Employee() {
         super();
-        companyName = null;
-        salary = null;
     }
     public String getCompanyName() {
         for(Experience experience : resume.historyExperience)
@@ -20,7 +20,10 @@ public class Employee extends User {
         recruiter.resume = resume;
         for(Consumer consumer : friendList) {
             consumer.add(recruiter);
+            consumer.remove(this);
+            //System.out.println(recruiter.showFriendsList());
         }
+
         recruiter.salary = salary;
         recruiter.companyName = companyName;
         return recruiter;
@@ -28,14 +31,26 @@ public class Employee extends User {
     public Manager convertToM() {
         Manager manager = new Manager();
         manager.resume = resume;
-        manager.friendList = friendList;
         manager.salary = salary;
         manager.companyName = companyName;
+
         for(Consumer consumer : friendList) {
             consumer.remove(this);
             consumer.add(manager);
         }
         return manager;
+    }
+    public User convertToU() {
+        User user = new User();
+        Consumer consumer;
+        user.resume = resume;
+        ArrayList<Consumer> listAux = friendList;
+        for(int i = 0; i < listAux.size(); i++) {
+            consumer = friendList.get(i);
+            consumer.remove(this);
+            consumer.add(user);
+        }
+        return user;
     }
     public String toString(){
         return  " CompanyName " + companyName +

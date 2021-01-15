@@ -83,22 +83,23 @@ public class Application {
         return null;
     }
     public Recruiter getRecr(String name, String firsName) {
-        for (Company company : companyList)
-            for (Recruiter recruiter :company.recruiterArrayList)
-                if (recruiter.resume.information.getName()
-                        .compareTo(name) == 0)
-                    if(recruiter.resume.information.getFirstName()
-                            .compareTo(firsName) == 0)
+        for(Company company : companyList)
+            for(Recruiter recruiter : company.recruiterArrayList)
+                if(recruiter.resume.information.getName().compareTo(name)==0)
+                    if(recruiter.resume.information.getFirstName().compareTo(firsName) == 0)
                         return recruiter;
-        return null;
+                    return null;
     }
     public Manager getMan(String name, String firstName) {
-        for (Company company : companyList)
-            if(company.manager.resume.information.
+        Company company;
+        for (Company value : companyList) {
+            company = value;
+            if (company.manager.resume.information.
                     getName().compareTo(name) == 0)
-                if(company.manager.resume.information.
+                if (company.manager.resume.information.
                         getFirstName().compareTo(firstName) == 0)
                     return company.manager;
+        }
                 return null;
     }
 
@@ -210,6 +211,45 @@ public class Application {
             companyList.add(company);
         }
     }
+    public TreeSet<Education> createEduHis(JSONArray jsonAEdu) {
+        String startDate, endDate, nameOfInst, eduLev;
+        Double finalGpa;
+        TreeSet<Education> eduHisTree = new TreeSet<>();
+
+        for(Object object : jsonAEdu) {
+            startDate = (String)((JSONObject)object).get("start_date");
+            endDate = (String)((JSONObject)object).get("end_date");
+            nameOfInst =(String)((JSONObject)object).get("name");
+            eduLev = (String)((JSONObject)object).get("level");
+            finalGpa = (Double) ((JSONObject)object).get("grade");
+            eduHisTree.add(new Education(startDate, endDate, finalGpa,
+                    nameOfInst, eduLev));
+        }
+        return eduHisTree;
+    }
+    public TreeSet<Experience> createExpHis(JSONArray jsonAExp,
+                                            StringBuffer dep,
+                                            StringBuffer comp){
+        String startDate, endDate, nameOfComp, position;
+        TreeSet<Experience> expHisTree = new TreeSet<>();
+        Experience exp;
+
+        for (Object object : jsonAExp) {
+            startDate = (String)((JSONObject)object).get("start_date");
+            endDate = (String)((JSONObject)object).get("end_date");
+            nameOfComp = (String)((JSONObject)object).get("company");
+            position = (String)((JSONObject)object).get("position");
+            exp = new Experience(startDate, endDate, position, nameOfComp);
+
+            if (exp.endDate == null){
+                dep.append((String) ((JSONObject)object).get("department"));
+                comp.append((String) ((JSONObject)object).get("company"));
+            }
+            expHisTree.add(exp);
+        }
+        return expHisTree;
+    }
+
     public User createConsumerfromJson(JSONObject objectAux,
                                        StringBuffer dep, StringBuffer comp) {
 
@@ -254,54 +294,15 @@ public class Application {
         }
         return user;
     }
-
-    public TreeSet<Education> createEduHis(JSONArray jsonAEdu) {
-        String startDate, endDate, nameOfInst, eduLev;
-        Double finalGpa;
-        TreeSet<Education> eduHisTree = new TreeSet<>();
-
-        for(Object object : jsonAEdu) {
-                startDate = (String)((JSONObject)object).get("start_date");
-                endDate = (String)((JSONObject)object).get("end_date");
-                nameOfInst =(String)((JSONObject)object).get("name");
-                eduLev = (String)((JSONObject)object).get("level");
-                finalGpa = (Double) ((JSONObject)object).get("grade");
-                eduHisTree.add(new Education(startDate, endDate, finalGpa,
-                        nameOfInst, eduLev));
-        }
-        return eduHisTree;
-    }
-    public TreeSet<Experience> createExpHis(JSONArray jsonAExp,
-                                            StringBuffer dep,
-                                            StringBuffer comp){
-        String startDate, endDate, nameOfComp, position;
-        TreeSet<Experience> expHisTree = new TreeSet<>();
-        Experience exp;
-
-        for (Object object : jsonAExp) {
-            startDate = (String)((JSONObject)object).get("start_date");
-            endDate = (String)((JSONObject)object).get("end_date");
-            nameOfComp = (String)((JSONObject)object).get("company");
-            position = (String)((JSONObject)object).get("position");
-            exp = new Experience(startDate, endDate, position, nameOfComp);
-
-            if (exp.endDate == null){
-                dep.append((String) ((JSONObject)object).get("department"));
-                comp.append((String) ((JSONObject)object).get("company"));
-            }
-            expHisTree.add(exp);
-        }
-        return expHisTree;
-    }
     public void deSerialiseConsumers(String fileName) throws IOException, ParseException {
 
         Department department;
         Company company;
         Employee employee;
         User user;
-        //I instantiated a StringBuffer because i need to be able
-        //to change the string inside of the buffer inside a method
-        //while with String i cannot, because it is a immutable
+//        I instantiated a StringBuffer because i need to be able
+//        to change the string inside of the buffer inside a method
+//        while with String i cannot, because it is a immutable
         StringBuffer dep = new StringBuffer("Apllication.Departamente.");
         StringBuffer comp = new StringBuffer();
         JSONParser parser = new JSONParser();
@@ -325,10 +326,9 @@ public class Application {
 
             employee = user.convert();
             employee.companyName = comp.toString();
-            employee.salary = Integer.parseInt(String.valueOf(
+            employee.salary = Double.parseDouble(String.valueOf(
                     ((JSONObject) objectAux).get("salary")));
 
-//            System.out.println(employee);
             company = getCompany(employee.companyName);
             department = company.getDepartment(dep.toString());
             if(department != null)
@@ -345,7 +345,7 @@ public class Application {
 
             employee = user.convert();
             employee.companyName = comp.toString();
-            employee.salary = Integer.parseInt(String.valueOf(
+            employee.salary = Double.parseDouble(String.valueOf(
                     ((JSONObject) objectAux).get("salary")));
 
             //Recruiters all are part of the IT department
@@ -365,9 +365,8 @@ public class Application {
 
             employee = user.convert();
             employee.companyName = comp.toString();
-            employee.salary = Integer.parseInt(String.valueOf(
+            employee.salary = Double.parseDouble(String.valueOf(
                     ((JSONObject) objectAux).get("salary")));
-
             getCompany(comp.toString()).manager  = employee.convertToM();
 
             comp.delete(0, comp.length());
@@ -472,8 +471,9 @@ public class Application {
                                 recr.add(recrF);
                         } else if (name[0].compareTo("E") == 0) {
                             emplF = getEmpl(name[1], name[2]);
-                            if (emplF != null && !recr.friendList.contains(emplF))
-                            recr.add(getEmpl(name[1], name[2]));
+                            if (emplF != null && !recr.friendList.contains(emplF)) {
+                                recr.add(getEmpl(name[1], name[2]));
+                            }
                         } else {
                             manF = getMan(name[1], name[2]);
                             if (manF != null && !recr.friendList.contains(manF))

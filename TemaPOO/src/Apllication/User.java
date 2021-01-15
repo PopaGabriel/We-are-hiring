@@ -21,7 +21,8 @@ public class User extends Consumer implements Observer {
     //we have to remove him from the list of his friends
     //and add him again after that as an employee object
     public void updateFriendList(Employee employee) {
-        for (int i = 0; i < friendList.size(); i++) {
+        ArrayList<Consumer> listAux = friendList;
+        for(int i = 0; i < listAux.size(); i++){
             employee.add(friendList.get(i));
             friendList.get(i).remove(this);
         }
@@ -36,7 +37,6 @@ public class User extends Consumer implements Observer {
         employee.listWantedCompany = null;
         employee.resume = resume;
         updateFriendList(employee);
-
         return employee;
     }
     //Here i calculate the experience of an user
