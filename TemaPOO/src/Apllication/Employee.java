@@ -4,11 +4,6 @@ public class Employee extends User {
     public String companyName;
     public Integer salary;
 
-    public Employee (String companyName, Integer salary) {
-        super();
-        this.companyName = companyName;
-        this.salary = salary;
-    }
     public Employee() {
         super();
         companyName = null;

@@ -1,5 +1,7 @@
 package Apllication;
 
+import Apllication.Exceptions.InvalidDatesException;
+
 import java.time.LocalDate;
 
 public class Experience implements Comparable{
@@ -43,7 +45,7 @@ public class Experience implements Comparable{
     }
     @Override
     public int compareTo(Object o) {
-        if(endDate == null || ((Experience)o).endDate == null)
+        if(endDate == null)
             return -1;
         if(((Experience)o).endDate == null)
             return 1;

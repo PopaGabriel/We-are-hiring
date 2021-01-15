@@ -1,20 +1,44 @@
 package Apllication;
 
 import Apllication.Departamente.*;
+import Apllication.Interfaces.Observer;
+import Apllication.Interfaces.Subject;
 
 import java.util.ArrayList;
 
-public class Company{
+public class Company implements Subject {
     public String nameOfCompany;
     public Manager manager;
     public ArrayList<Department> departmenteArrayList;
     public ArrayList<Recruiter> recruiterArrayList;
 
+    public ArrayList<Observer> observers;
+
+
     public Company(String nameOfCompany){
         departmenteArrayList = new ArrayList<>();
         recruiterArrayList = new ArrayList<>();
+        observers = new ArrayList<>();
         this.nameOfCompany = nameOfCompany;
         manager = new Manager();
+    }
+
+
+    @Override
+    public void addObserver(User user) {
+        if(!observers.contains(user))
+            observers.add(user);
+    }
+
+    @Override
+    public void removeObserver(User user) {
+        observers.remove(user);
+    }
+
+    @Override
+    public void notifyAllObservers(String mess) {
+        for(Observer observer : observers)
+            observer.update(mess);
     }
 
     public void add(Recruiter recruiter){
@@ -28,7 +52,6 @@ public class Company{
     public void add(Employee employee, Department department){
         department.employeeArrayList.add(employee);
     }
-
     public void remove(Department department){
         department.employeeArrayList.clear();
         departmenteArrayList.remove(department);
@@ -109,6 +132,7 @@ public class Company{
         }
         return listOfDepartmentsNames;
     }
+
     @Override
     public String toString() {
         return "Apllication.Company{" +

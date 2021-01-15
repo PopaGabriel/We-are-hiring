@@ -6,14 +6,14 @@ abstract class Consumer {
     public Resume resume;
     public ArrayList<Consumer> friendList;
 
-    public Consumer(String name, String firstName, String email,
-                    String phoneNumber, String birthDate, String gender) {
-        resume = new Resume(name, firstName, email, phoneNumber,
-                birthDate, gender);
-        friendList = new ArrayList<>();
-    }
+//    public Consumer(String name, String firstName, String email,
+//                    String phoneNumber, String birthDate, String gender) {
+//        resume = new Resume(name, firstName, email, phoneNumber,
+//                birthDate, gender);
+//        friendList = new ArrayList<>();
+//    }
     public Consumer() {
-        resume = new Resume();
+        resume = null;
         friendList = new ArrayList<>();
     }
     public void add(Consumer consumer) {
@@ -109,30 +109,5 @@ abstract class Consumer {
         }
         //we didn't find a path to the desired consumer
         return 10000;
-    }
-    class Resume {
-        //I used treeset to add objects because
-        //they need to be added in a specific way(descending or ascending)
-        //and the set permits me to build a specific comparator so I don't have
-        //to sort every time i add an element
-        Information information;
-        TreeSet<Education> historyEducation;
-        TreeSet<Experience> historyExperience;
-
-        public Resume(String name, String firstName, String email,
-                      String phoneNumber, String birthDate, String gender){
-            information = new Information(name, firstName, email,
-                     phoneNumber, birthDate, gender);
-            historyEducation = new TreeSet<Education>();
-            historyExperience = new TreeSet<Experience>();
-        }
-        public Resume(){
-            information = new Information();
-            historyEducation = new TreeSet<Education>();
-            historyExperience = new TreeSet<Experience>();
-        }
-        public String toString(){
-            return information + " " + historyEducation + historyExperience;
-        }
     }
 }

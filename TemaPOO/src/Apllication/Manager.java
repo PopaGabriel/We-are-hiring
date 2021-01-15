@@ -7,11 +7,11 @@ public class Manager extends Employee {
     TreeSet<Request<Job, User>> jobApplications;
     public Manager() {
         super();
-        /*
-        I use TreeSet because i can add elements
-        without having to sort them every time
-        by making a custom comparator
-        */
+//        /*
+//        I use TreeSet because i can add elements
+//        without having to sort them every time
+//        by making a custom comparator
+//        */
         jobApplications = new TreeSet<>();
     }
     public void add(Request<Job, User> request) {
@@ -49,6 +49,9 @@ public class Manager extends Employee {
                                 ("Apllication.Departamente.IT"));
                         job.noPositions--;
                         job.userArrayList.remove(request.getValue1());
+
+                        for (Company company1 : app.companyList)
+                            company1.removeObserver(request.getValue1());
                     }
                 }
             }

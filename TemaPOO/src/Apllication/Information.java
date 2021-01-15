@@ -84,6 +84,10 @@ public class Information {
         return languages;
     }
 
+    public void setLanguages(ArrayList<Language> languages) {
+        this.languages = languages;
+    }
+
     public void add(Language language){
         languages.add(language);
     }

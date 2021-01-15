@@ -103,10 +103,10 @@ public class SignUp extends JFrame implements ActionListener {
     }
     @Override
     public void actionPerformed(ActionEvent e) {
-        User user = new User(textName.getText(),textFirstName.getText(),textEmail.getText(),textPhoneNumber.getText()
-                            ,makeBirthDate(), textGender.getText());
+//        User user = new User(textName.getText(),textFirstName.getText(),textEmail.getText(),textPhoneNumber.getText()
+//                            ,makeBirthDate(), textGender.getText());
         Application app = Application.getInstance();
-        app.userList.add(user);
+//        app.userList.add(user);
         //System.out.println(app);
     }
 }

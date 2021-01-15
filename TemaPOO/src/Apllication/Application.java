@@ -1,6 +1,7 @@
 package Apllication;
 
 import Apllication.Departamente.*;
+import Apllication.Exceptions.ResumeIncompleteException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -18,8 +19,8 @@ public class Application {
     public ArrayList<Company> companyList;
 
     private Application(){
-        userList = new ArrayList<User>();
-        companyList = new ArrayList<Company>();
+        userList = new ArrayList<>();
+        companyList = new ArrayList<>();
     }
 
     public static Application getInstance(){
@@ -209,30 +210,48 @@ public class Application {
             companyList.add(company);
         }
     }
-    public User createConsumerfromJson(JSONObject objectAux) {
+    public User createConsumerfromJson(JSONObject objectAux,
+                                       StringBuffer dep, StringBuffer comp) {
 
         String auxString;
         String[] auxStringVector;
-        User user = new User();
-        Consumer.Resume resume = user.resume;
-        Information information = resume.information;
-
-        auxString = (String) objectAux.get("name");
-        auxStringVector = auxString.split(" ");
-        information.setName(auxStringVector[0]);
-        information.setFirstName(auxStringVector[1]);
-        information.setBirthDate((String)objectAux.get("date_of_birth"));
-        information.setEmail((String)objectAux.get("email"));
-        information.setGender((String)objectAux.get("genre"));
-        information.setPhoneNumber((String)objectAux.get("phone"));
+        ArrayList<Language> languages = new ArrayList<>();
 
         JSONArray jsonArrayLang = (JSONArray) objectAux.get("languages");
         JSONArray jsonArrayLev = (JSONArray) objectAux.get("languages_level");
-        for (int i = 0; i < jsonArrayLang.size(); i++) {
-            information.add(new Language((String)jsonArrayLang.
-                    get(i), (String)jsonArrayLev.get(i)));
-        }
+        JSONArray jsonArrayEdu = (JSONArray)(objectAux).get("education");
+        JSONArray jsonAExp = (JSONArray)(objectAux).get("experience");
 
+        for (int i = 0; i < jsonArrayLang.size(); i++)
+            languages.add(new Language((String)jsonArrayLang.
+                    get(i), (String)jsonArrayLev.get(i)));
+
+        auxString = (String) objectAux.get("name");
+        auxStringVector = auxString.split(" ");
+
+        User user = new User();
+
+        user.resume = new Resume.ResumeBuilder()
+                .Education(createEduHis(jsonArrayEdu))
+                .Experience(createExpHis(jsonAExp, dep, comp))
+                .name(auxStringVector[0])
+                .firstName(auxStringVector[1])
+                .birthDate((String)objectAux.get("date_of_birth"))
+                .email((String)objectAux.get("email"))
+                .gender((String)objectAux.get("genre"))
+                .phoneNumber((String)objectAux.get("phone"))
+                .language(languages)
+                .build();
+        try {
+
+            if(user.resume.information.getName() == null)
+                throw new ResumeIncompleteException("System.out.printlnIncomplete Information");
+            if(user.resume.historyEducation.size() < 1)
+                throw  new ResumeIncompleteException("Get some education my guy!");
+
+        } catch (ResumeIncompleteException e) {
+            return null;
+        }
         return user;
     }
 
@@ -252,8 +271,9 @@ public class Application {
         }
         return eduHisTree;
     }
-    public TreeSet createExpHis(JSONArray jsonAExp, StringBuffer dep,
-                                StringBuffer comp){
+    public TreeSet<Experience> createExpHis(JSONArray jsonAExp,
+                                            StringBuffer dep,
+                                            StringBuffer comp){
         String startDate, endDate, nameOfComp, position;
         TreeSet<Experience> expHisTree = new TreeSet<>();
         Experience exp;
@@ -295,23 +315,20 @@ public class Application {
         JSONArray jsonARec = (JSONArray) jsonObject.get("recruiters");
         JSONArray jsonAMan = (JSONArray) jsonObject.get("managers");
         JSONArray jsonAUser = (JSONArray) jsonObject.get("users");
-        JSONArray jsonAEdu, jsonAExp, jSonInterestedC;
+        JSONArray jSonInterestedC;
 
         //Here I add the employees
         for (Object objectAux : jsonAEmp) {
-            user = createConsumerfromJson((JSONObject) objectAux);
-
-            jsonAEdu = (JSONArray)((JSONObject) objectAux).get("education");
-            user.resume.historyEducation = createEduHis(jsonAEdu);
-
-            jsonAExp = (JSONArray)((JSONObject)objectAux).get("experience");
-            user.resume.historyExperience = createExpHis(jsonAExp, dep, comp);
+            user = createConsumerfromJson((JSONObject) objectAux, dep, comp);
+            if(user == null)
+                continue;
 
             employee = user.convert();
             employee.companyName = comp.toString();
             employee.salary = Integer.parseInt(String.valueOf(
                     ((JSONObject) objectAux).get("salary")));
 
+//            System.out.println(employee);
             company = getCompany(employee.companyName);
             department = company.getDepartment(dep.toString());
             if(department != null)
@@ -319,17 +336,12 @@ public class Application {
             dep.delete(0, dep.length());
             dep.append("Apllication.Departamente.");
             comp.delete(0, comp.length());
-
         }
         //Here I add recruiters
         for(Object objectAux : jsonARec) {
-            user = createConsumerfromJson((JSONObject) objectAux);
-
-            jsonAEdu = (JSONArray)((JSONObject) objectAux).get("education");
-            user.resume.historyEducation = createEduHis(jsonAEdu);
-
-            jsonAExp = (JSONArray)((JSONObject)objectAux).get("experience");
-            user.resume.historyExperience = createExpHis(jsonAExp, dep, comp);
+            user = createConsumerfromJson((JSONObject) objectAux, dep, comp);
+            if(user == null)
+                continue;
 
             employee = user.convert();
             employee.companyName = comp.toString();
@@ -344,36 +356,28 @@ public class Application {
 
             comp.delete(0, comp.length());
         }
-        //Here I add the managers
+//        //Here I add the managers
         for(Object objectAux : jsonAMan) {
-            user = createConsumerfromJson((JSONObject) objectAux);
+            user = createConsumerfromJson((JSONObject) objectAux, dep, comp);
 
-            jsonAEdu = (JSONArray) ((JSONObject) objectAux).get("education");
-            user.resume.historyEducation = createEduHis(jsonAEdu);
-
-            jsonAExp = (JSONArray) ((JSONObject) objectAux).get("experience");
-            user.resume.historyExperience = createExpHis(jsonAExp, dep, comp);
+            if (user == null)
+                continue;
 
             employee = user.convert();
             employee.companyName = comp.toString();
             employee.salary = Integer.parseInt(String.valueOf(
                     ((JSONObject) objectAux).get("salary")));
 
-            company = getCompany(comp.toString());
-            company.manager = employee.convertToM();
+            getCompany(comp.toString()).manager  = employee.convertToM();
+
             comp.delete(0, comp.length());
         }
         //Here i add the users
         for (Object objectAux : jsonAUser) {
-            user = createConsumerfromJson((JSONObject) objectAux);
-
-            jsonAEdu = (JSONArray) ((JSONObject) objectAux).get("education");
-            user.resume.historyEducation = createEduHis(jsonAEdu);
-
-            jsonAExp = (JSONArray) ((JSONObject) objectAux).get("experience");
-            user.resume.historyExperience = createExpHis(jsonAExp, dep, comp);
-
+            user = createConsumerfromJson((JSONObject) objectAux, dep, comp);
             jSonInterestedC = (JSONArray)((JSONObject) objectAux).get("interested_companies");
+            if (user == null)
+                continue;
 
             for (int i = 0; i < jSonInterestedC.size(); i++)
                 user.listWantedCompany.add((String)jSonInterestedC.get(i));
@@ -507,6 +511,7 @@ public class Application {
         for (User user : userList)
             for(Company company : companyList)
                 if(user.listWantedCompany.contains(company.nameOfCompany)) {
+                    company.addObserver(user);
                     jobs = company.getJobs();
                     for (Job job : jobs)
                         job.apply(user);

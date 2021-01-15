@@ -1,19 +1,22 @@
 package Apllication;
 
+import Apllication.Interfaces.Observer;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class User extends Consumer {
+public class User extends Consumer implements Observer {
     ArrayList<String> listWantedCompany;
+    ArrayList<String> notifiStack;
 
-    public User(String name, String firstName, String email,
-                String phoneNumber, String birthDate, String gender){
-        super(name, firstName, email, phoneNumber, birthDate, gender);
-        listWantedCompany = new ArrayList<>();
-    }
-    public User(){
+    public User() {
         super();
         listWantedCompany = new ArrayList<>();
+        notifiStack = new ArrayList<>();
+    }
+    @Override
+    public void update(String mess) {
+        notifiStack.add(mess);
     }
     //we have to remove him from the list of his friends
     //and add him again after that as an employee object
@@ -71,6 +74,7 @@ public class User extends Consumer {
     public Double getTotalScore(){
         return getExperienceTime() * 1.5 + meanGPA();
     }
+
     public String toString() {
         return  resume  +" Friends: "+showFriendsList() +" Wanted Companies: "
                 +listWantedCompany+" \n";
