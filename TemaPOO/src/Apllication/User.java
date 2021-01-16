@@ -14,21 +14,23 @@ public class User extends Consumer implements Observer {
         listWantedCompany = new ArrayList<>();
         notifiStack = new ArrayList<>();
     }
+
     @Override
     public void update(String mess) {
         notifiStack.add(mess);
     }
+
     //we have to remove him from the list of his friends
     //and add him again after that as an employee object
     public void updateFriendList(Employee employee) {
         ArrayList<Consumer> listAux = friendList;
-        for(int i = 0; i < listAux.size(); i++){
+        for (int i = 0; i < listAux.size(); i++) {
             employee.add(friendList.get(i));
             friendList.get(i).remove(this);
         }
     }
-    public Employee convert()
-    {
+
+    public Employee convert() {
 
         Application app = Application.getInstance();
         app.userList.remove(this);
@@ -39,6 +41,7 @@ public class User extends Consumer implements Observer {
         updateFriendList(employee);
         return employee;
     }
+
     //Here i calculate the experience of an user
     public int getExperienceTime() {
         int totalYears = 0, years, month;
@@ -50,10 +53,10 @@ public class User extends Consumer implements Observer {
                 month = now.getMonthValue() - experience.startDate.getMonthValue();
                 //if the month is lower than 0 we will just sum the year that we got as
                 //a result, because a minus month represents a plus month in the other year
-                if(month > 3)
+                if (month > 3)
                     years++;
-                else if(month == 3)
-                    if((now.getDayOfMonth()-experience.startDate.getDayOfMonth()) > 0)
+                else if (month == 3)
+                    if ((now.getDayOfMonth() - experience.startDate.getDayOfMonth()) > 0)
                         years++;
 
             } else {
@@ -71,12 +74,13 @@ public class User extends Consumer implements Observer {
         }
         return totalYears;
     }
-    public Double getTotalScore(){
+
+    public Double getTotalScore() {
         return getExperienceTime() * 1.5 + meanGPA();
     }
 
     public String toString() {
-        return  resume  +" Friends: "+showFriendsList() +" Wanted Companies: "
-                +listWantedCompany+" \n";
+        return resume + " Friends: " + showFriendsList() + " Wanted Companies: "
+                + listWantedCompany + " \n";
     }
 }

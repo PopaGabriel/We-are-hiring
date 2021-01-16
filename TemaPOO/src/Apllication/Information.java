@@ -1,4 +1,5 @@
 package Apllication;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -12,21 +13,24 @@ public class Information {
     private ArrayList<Language> languages;
 
     public Information(String name, String firstName, String email,
-                       String phoneNumber, String birthDate, String gender){
+                       String phoneNumber, String birthDate, String gender) {
         this.name = name;
         this.firstName = firstName;
         this.email = email;
         this.phoneNumber = phoneNumber;
-        if(birthDate != null){
+        if (birthDate != null) {
             String[] birthArray = birthDate.split("\\.");
             this.birthDate = LocalDate.of(AuxiliarMethods.changeSToI(birthArray[2]), AuxiliarMethods.changeSToI(birthArray[1]),
                     Integer.parseInt(birthArray[0]));
-        } else {this.birthDate = null;}
+        } else {
+            this.birthDate = null;
+        }
         this.gender = gender;
         languages = new ArrayList<>();
     }
-    public Information(){
-        this(null,null,null,null,null,null);
+
+    public Information() {
+        this(null, null, null, null, null, null);
     }
 
     //Getter and setter section
@@ -88,22 +92,23 @@ public class Information {
         this.languages = languages;
     }
 
-    public void add(Language language){
+    public void add(Language language) {
         languages.add(language);
     }
-    public void remove(Language language){
+
+    public void remove(Language language) {
         languages.remove(language);
     }
 
     @Override
     public String toString() {
         return "Apllication.User.Apllication.Information{" +
-                "name='" + name  +
-                ", firstName='" + firstName  +
-                ", email='" + email  +
-                ", phoneNumber='" + phoneNumber  +
-                ", birthDate='" + birthDate  +
-                ", gender='" + gender  +
+                "name='" + name +
+                ", firstName='" + firstName +
+                ", email='" + email +
+                ", phoneNumber='" + phoneNumber +
+                ", birthDate='" + birthDate +
+                ", gender='" + gender +
                 ", languagesKnown=" + languages +
                 "}\n";
     }

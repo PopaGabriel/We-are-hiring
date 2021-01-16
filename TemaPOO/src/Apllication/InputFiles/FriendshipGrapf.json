@@ -1,57 +1,93 @@
 {
-  "friend_connec":
-  [
+  "friend_connec": [
     {
       "name": "U_Daniel_Edmund",
-      "friends": ["U_Julia_Matvei", "E_Leyla_Stacy"]
+      "friends": [
+        "U_Julia_Matvei",
+        "E_Leyla_Stacy"
+      ]
     },
     {
       "name": "U_Julia_Matvei",
-      "friends" : ["R_Jonie_Phillip", "U_Daniel_Edmund", "E_Steward_Goodwin"]
+      "friends": [
+        "R_Jonie_Phillip",
+        "U_Daniel_Edmund",
+        "E_Steward_Goodwin"
+      ]
     },
     {
       "name": "U_Tamara_Haci",
-      "friends" : ["U_Linette_Spartak", "E_Leyla_Stacy"]
+      "friends": [
+        "U_Linette_Spartak",
+        "E_Leyla_Stacy"
+      ]
     },
     {
       "name": "U_Linette_Spartak",
-      "friends": ["U_Tamara_Haci", "E_Bryson_Reenie"]
+      "friends": [
+        "U_Tamara_Haci",
+        "E_Bryson_Reenie"
+      ]
     },
     {
       "name": "E_Shana_Addy",
-      "friends": ["R_Darrell_Lillie", "E_Bryson_Reenie"]
+      "friends": [
+        "R_Darrell_Lillie",
+        "E_Bryson_Reenie"
+      ]
     },
     {
       "name": "E_Leyla_Stacy",
-      "friends": ["U_Daniel_Edmund", "E_Rolland_Lyla", "R_Janine_Woody", "U_Tamara_Haci"]
+      "friends": [
+        "U_Daniel_Edmund",
+        "E_Rolland_Lyla",
+        "R_Janine_Woody",
+        "U_Tamara_Haci"
+      ]
     },
     {
       "name": "E_Rolland_Lyla",
-      "friends": ["E_Leyla_Stacy", "R_Damian_Bodhi"]
+      "friends": [
+        "E_Leyla_Stacy",
+        "R_Damian_Bodhi"
+      ]
     },
     {
       "name": "E_Bryson_Reenie",
-      "friends": ["U_Linette_Spartak", "E_Shana_Addy"]
+      "friends": [
+        "U_Linette_Spartak",
+        "E_Shana_Addy"
+      ]
     },
     {
       "name": "E_Steward_Goodwin",
-      "friends": ["U_Julia_Matvei"]
+      "friends": [
+        "U_Julia_Matvei"
+      ]
     },
     {
       "name": "R_Jonie_Phillip",
-      "friends": ["U_Julia_Matvei"]
+      "friends": [
+        "U_Julia_Matvei"
+      ]
     },
     {
       "name": "R_Janine_Woody",
-      "friends": ["E_Leyla_Stacy"]
+      "friends": [
+        "E_Leyla_Stacy"
+      ]
     },
     {
       "name": "R_Darrell_Lillie",
-      "friends": ["E_Shana_Addy"]
+      "friends": [
+        "E_Shana_Addy"
+      ]
     },
     {
       "name": "R_Damian_Bodhi",
-      "friends": ["E_Rolland_Lyla"]
+      "friends": [
+        "E_Rolland_Lyla"
+      ]
     }
   ]
 }

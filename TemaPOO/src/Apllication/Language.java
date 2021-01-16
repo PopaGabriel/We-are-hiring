@@ -1,31 +1,32 @@
 package Apllication;
 
 public class Language {
-        String nameOfLanguage;
-        String level;
-        public Language(String nameOfLanguage, String level) {
-            this.nameOfLanguage = nameOfLanguage;
-            this.level = level;
-        }
+    String nameOfLanguage;
+    String level;
 
-        public void setLevel(String level) {
-            this.level = level;
-        }
+    public Language(String nameOfLanguage, String level) {
+        this.nameOfLanguage = nameOfLanguage;
+        this.level = level;
+    }
 
-        public String getLevel() {
-            return level;
-        }
+    public void setLevel(String level) {
+        this.level = level;
+    }
 
-        public void setNameOfLanguage(String nameOfLanguage) {
-            this.nameOfLanguage = nameOfLanguage;
-        }
+    public String getLevel() {
+        return level;
+    }
 
-        public String getNameOfLanguage() {
-            return nameOfLanguage;
-        }
+    public void setNameOfLanguage(String nameOfLanguage) {
+        this.nameOfLanguage = nameOfLanguage;
+    }
+
+    public String getNameOfLanguage() {
+        return nameOfLanguage;
+    }
 
     @Override
     public String toString() {
-        return "{"+nameOfLanguage + "-" + level + '}';
+        return "{" + nameOfLanguage + "-" + level + '}';
     }
 }

@@ -1,53 +1,60 @@
 package Apllication;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Vector;
 
 abstract class Consumer {
     public Resume resume;
     public ArrayList<Consumer> friendList;
 
-//    public Consumer(String name, String firstName, String email,
+    //    public Consumer(String name, String firstName, String email,
 //                    String phoneNumber, String birthDate, String gender) {
 //        resume = new Resume(name, firstName, email, phoneNumber,
 //                birthDate, gender);
 //        friendList = new ArrayList<>();
 //    }
     public Consumer() {
-        resume = null;
         friendList = new ArrayList<>();
     }
+
     public void add(Consumer consumer) {
-        if(!consumer.friendList.contains(this)){
+        if (!consumer.friendList.contains(this)) {
             friendList.add(consumer);
             consumer.friendList.add(this);
         }
     }
+
     public void remove(Consumer consumer) {
         friendList.remove(consumer);
         consumer.friendList.remove(this);
     }
+
     public void add(Experience experience) {
-        if(experience.startDate != null)
+        if (experience.startDate != null)
             resume.historyExperience.add(experience);
     }
+
     public void add(Education education) {
-        if(education.startDate != null)
+        if (education.startDate != null)
             resume.historyEducation.add(education);
     }
+
     public Double meanGPA() {
         double sumOfGpa = 0;
-        for(Education education : resume.historyEducation)
-                sumOfGpa += education.finalGPA;
+        for (Education education : resume.historyEducation)
+            sumOfGpa += education.finalGPA;
 
         return sumOfGpa / resume.historyEducation.size();
     }
+
     public int getGraduationYear() {
-        for(Education education : resume.historyEducation)
-            if(education.educationLevel.compareTo("college") == 0)
-                if(education.endDate != null)
+        for (Education education : resume.historyEducation)
+            if (education.educationLevel.compareTo("college") == 0)
+                if (education.endDate != null)
                     return education.endDate.getYear();
         return 0;
     }
+
     /*
     We don't want to enter into a recursion to infinity
     So we have to parse the friends lists and build a string
@@ -57,7 +64,7 @@ abstract class Consumer {
         String aux = "";
         for (Consumer consumer : friendList)
             aux += " " + consumer.resume.information.getName()
-                    +" "+consumer.resume.information.getFirstName();
+                    + " " + consumer.resume.information.getFirstName();
         return aux;
     }
 
@@ -83,11 +90,11 @@ abstract class Consumer {
         //the null element will be used to represent the level at which we are
         //and will be added every time we find another null value
         consumerToParse.add(null);
-        while(consumerToParse.size() != 1) {
+        while (consumerToParse.size() != 1) {
             consumerBase = consumerToParse.get(0);
             consumerToParse.remove(0);
             //we went down a level
-            if(consumerBase == null) {
+            if (consumerBase == null) {
                 consumerToParse.remove(null);
                 consumerToParse.add(null);
                 depth++;
@@ -98,11 +105,11 @@ abstract class Consumer {
             //depth calculation
             alreadyParsed.add(consumerBase);
             //if we found what we searched for
-            if(consumerBase.equals(consumer))
+            if (consumerBase.equals(consumer))
                 return depth;
             else {
-                for(Consumer auxConsumers : consumerBase.friendList){
-                    if(!alreadyParsed.contains(auxConsumers))
+                for (Consumer auxConsumers : consumerBase.friendList) {
+                    if (!alreadyParsed.contains(auxConsumers))
                         consumerToParse.add(auxConsumers);
                 }
             }

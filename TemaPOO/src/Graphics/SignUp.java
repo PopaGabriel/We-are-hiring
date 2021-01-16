@@ -1,7 +1,6 @@
 package Graphics;
 
 import Apllication.Application;
-import Apllication.User;
 
 import javax.swing.*;
 import java.awt.*;
@@ -33,16 +32,16 @@ public class SignUp extends JFrame implements ActionListener {
     public JButton Button1;
 
 
-    public SignUp(String text){
+    public SignUp(String text) {
         super(text);
         Application app = Application.getInstance();
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setMinimumSize(new Dimension(300,200));
+        setMinimumSize(new Dimension(300, 200));
         getContentPane().setBackground(Color.white);
 
-        Panel1 = new JPanel(new GridLayout(13,1));
-        panelBirthDate = new JPanel(new GridLayout(1,6));
+        Panel1 = new JPanel(new GridLayout(13, 1));
+        panelBirthDate = new JPanel(new GridLayout(1, 6));
         fillPanelBirthDate(panelBirthDate);
 
         labelName = new JLabel("Name: ");
@@ -52,10 +51,10 @@ public class SignUp extends JFrame implements ActionListener {
         labelPhoneNumber = new JLabel("Phone number ");
 
         textName = new JTextField(20);
-        textFirstName =  new JTextField(20);
-        textPhoneNumber =  new JTextField(20);
-        textEmail =  new JTextField(20);
-        textGender =  new JTextField(20);
+        textFirstName = new JTextField(20);
+        textPhoneNumber = new JTextField(20);
+        textEmail = new JTextField(20);
+        textGender = new JTextField(20);
 
         Panel1.add(labelName);
         Panel1.add(textName);
@@ -65,12 +64,9 @@ public class SignUp extends JFrame implements ActionListener {
 
         Panel1.add(labelEmail);
         Panel1.add(textEmail);
-
         Panel1.add(labelPhoneNumber);
         Panel1.add(textPhoneNumber);
-
         Panel1.add(panelBirthDate);
-
         Panel1.add(labelGender);
         Panel1.add(textGender);
 
@@ -79,17 +75,18 @@ public class SignUp extends JFrame implements ActionListener {
         Panel1.add(Button1);
 
         add(Panel1);
-        show();
+        setVisible(true);
         pack();
     }
-    public void fillPanelBirthDate(JPanel panelBirthDate){
+
+    public void fillPanelBirthDate(JPanel panelBirthDate) {
 
         labelBirthDateYear = new JLabel("Year: ");
         labelBirthDateMonth = new JLabel("Month: ");
         labelBirthDateDay = new JLabel("Day: ");
-        textBirthYear = new JTextField("",20);
-        textBirthMonth = new JTextField("",20);
-        textBirthDay = new JTextField("",20);
+        textBirthYear = new JTextField("", 20);
+        textBirthMonth = new JTextField("", 20);
+        textBirthDay = new JTextField("", 20);
         panelBirthDate.add(labelBirthDateYear);
         panelBirthDate.add(textBirthYear);
         panelBirthDate.add(labelBirthDateMonth);
@@ -98,9 +95,11 @@ public class SignUp extends JFrame implements ActionListener {
         panelBirthDate.add(textBirthDay);
 
     }
-    public String makeBirthDate(){
-        return textBirthDay.getText() + " " +textBirthMonth.getText() +" "+ textBirthYear.getText();
+
+    public String makeBirthDate() {
+        return textBirthDay.getText() + " " + textBirthMonth.getText() + " " + textBirthYear.getText();
     }
+
     @Override
     public void actionPerformed(ActionEvent e) {
 //        User user = new User(textName.getText(),textFirstName.getText(),textEmail.getText(),textPhoneNumber.getText()

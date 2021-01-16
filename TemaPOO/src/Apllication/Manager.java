@@ -6,6 +6,7 @@ import java.util.TreeSet;
 
 public class Manager extends Employee {
     TreeSet<Request<Job, User>> jobApplications;
+
     public Manager() {
         super();
         /*
@@ -15,12 +16,14 @@ public class Manager extends Employee {
         */
         jobApplications = new TreeSet<>();
     }
+
     public void add(Request<Job, User> request) {
         jobApplications.add(request);
     }
+
     public String showJobAppl() {
         StringBuilder stringAux = new StringBuilder();
-        for(Request<Job, User> request : jobApplications)
+        for (Request<Job, User> request : jobApplications)
             stringAux.append("\nStart of requests:\n").append(request.getKey().nameOfCompany).
                     append(" ").
                     append(request.getKey().nameOfJob).
@@ -30,19 +33,20 @@ public class Manager extends Employee {
                     append(request.getValue2().resume.information.getName());
         return String.valueOf(stringAux);
     }
+
     public void process(Job job) {
         Application app = Application.getInstance();
         ArrayList<Request<Job, User>> lista_cereri = new ArrayList<>();
         Employee employee;
         Company company = app.getCompany(companyName);
 
-        for(Request<Job, User> request : jobApplications)
-            if(request.getKey().equals(job)) {
+        for (Request<Job, User> request : jobApplications)
+            if (request.getKey().equals(job)) {
 
                 lista_cereri.add(request);
-                if(request.getKey().noPositions > 0
+                if (request.getKey().noPositions > 0
                         && request.getKey().flag == 1) {
-                    if(app.userList.contains(request.getValue1())) {
+                    if (app.userList.contains(request.getValue1())) {
 
                         employee = request.getValue1().convert();
 
@@ -59,17 +63,18 @@ public class Manager extends Employee {
                         job.noPositions--;
                         job.userArrayList.remove(request.getValue1());
 
-                        for (Company company1 : app.companyList){
+                        for (Company company1 : app.companyList) {
                             company1.removeObserver(request.getValue1());
-                            request.getValue1().update("U are the chosen one! "+companyName);
+                            request.getValue1().update("U are the chosen one! " + companyName);
                         }
                     }
                 }
             }
         job.flag = 0;
-        for(Request<Job, User> request : lista_cereri)
+        for (Request<Job, User> request : lista_cereri)
             jobApplications.remove(request);
     }
+
     @Override
     //Trebuie refacut
     public String toString() {
