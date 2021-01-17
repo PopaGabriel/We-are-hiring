@@ -31,7 +31,7 @@ public class EducationRenderer extends JPanel implements ListCellRenderer<Educat
 
 
         if(isSelected)
-            setBackground(Color.CYAN);
+            setBackground(Color.ORANGE);
         else
             setBackground(Color.GRAY);
 

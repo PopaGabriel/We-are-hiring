@@ -3,11 +3,11 @@ package Apllication;
 import java.util.ArrayList;
 
 public class Job {
-    String nameOfJob;
+    public String nameOfJob;
     String nameOfCompany;
-    int flag;
-    int noPositions;
-    Double salary;
+    public int flag;
+    public int noPositions;
+    public Double salary;
     Constraint constraintEducation;
     Constraint constraintExperience;
     Constraint constraintFinalGpa;
@@ -48,29 +48,29 @@ public class Job {
         if (constraintExperience != null) {
             timeExperience = user.getExperienceTime();
             if (constraintExperience.inferiorLimit != null)
-                if (constraintExperience.inferiorLimit > timeExperience)
+                if (constraintExperience.inferiorLimit >= timeExperience)
                     return false;
             if (constraintExperience.superiorLimit != null)
-                if (constraintExperience.superiorLimit < timeExperience)
+                if (constraintExperience.superiorLimit <= timeExperience)
                     return false;
         }
         if (constraintEducation != null) {
             timeEdu = user.getGraduationYear();
             if (constraintEducation.inferiorLimit != null)
-                if (constraintEducation.inferiorLimit > timeEdu)
+                if (constraintEducation.inferiorLimit >= timeEdu)
                     return false;
             if (constraintEducation.superiorLimit != null)
-                if (constraintEducation.superiorLimit < timeEdu)
+                if (constraintEducation.superiorLimit <= timeEdu)
                     return false;
         }
 
         if (constraintFinalGpa != null) {
             finalGpa = user.meanGPA();
             if (constraintFinalGpa.inferiorLimit != null)
-                if (constraintFinalGpa.inferiorLimit > finalGpa)
+                if (constraintFinalGpa.inferiorLimit >= finalGpa)
                     return false;
             if (constraintFinalGpa.superiorLimit != null)
-                if (constraintFinalGpa.superiorLimit < finalGpa)
+                if (constraintFinalGpa.superiorLimit <= finalGpa)
                     return false;
         }
         return true;

@@ -13,7 +13,7 @@ public abstract class Department {
         employeeArrayList = new ArrayList<>();
         openJobs = new ArrayList<>();
     }
-//    public abstract Double getBudget();
+    public abstract Double getTotalSalaryBudget();
 
     public void add(Job job) {
         openJobs.add(job);

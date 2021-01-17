@@ -2,10 +2,7 @@ package Tests;
 
 import Apllication.*;
 import Apllication.Departamente.Department;
-import Graphics.CompanyPage;
-import Graphics.MeniuPage;
-import Graphics.ProfilePage;
-import Graphics.SignUp;
+import Graphics.*;
 import org.json.simple.parser.ParseException;
 import java.io.IOException;
 
@@ -39,7 +36,9 @@ class SignUpTest {
 //        SignUp signUp = new SignUp("Test");
 //        MeniuPage meniuPage = new MeniuPage();
 //        new ProfilePage(app.userList.get(2));
-        new CompanyPage(app.getCompany("Google"));
+//        new CompanyPage(app.getCompany("Google"));
+          new AdminPage();
     }
+
 
 }
