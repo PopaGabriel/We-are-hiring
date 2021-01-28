@@ -1,22 +1,20 @@
 package Apllication;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
+import java.util.TreeSet;
 import java.util.Vector;
 
-abstract class Consumer {
-    public Resume resume;
-    public ArrayList<Consumer> friendList;
+public abstract class Consumer {
+    private Resume resume;
+    private ArrayList<Consumer> friendList;
 
-    //    public Consumer(String name, String firstName, String email,
-//                    String phoneNumber, String birthDate, String gender) {
-//        resume = new Resume(name, firstName, email, phoneNumber,
-//                birthDate, gender);
-//        friendList = new ArrayList<>();
-//    }
     public Consumer() {
         friendList = new ArrayList<>();
     }
-
+    //this method adds a consumer to the friendlist
+    //while also adding this object to theirs
     public void add(Consumer consumer) {
         if (!consumer.friendList.contains(this)) {
             friendList.add(consumer);
@@ -24,35 +22,75 @@ abstract class Consumer {
         }
     }
 
+    //this method removes a consumer to the friendlist
+    //while also removing this object to theirs
     public void remove(Consumer consumer) {
         friendList.remove(consumer);
         consumer.friendList.remove(this);
     }
 
+    //this adds an experience to the users experiences list
     public void add(Experience experience) {
-        if (experience.startDate != null)
-            resume.historyExperience.add(experience);
+        if (experience.getStartDate() != null)
+            getHisExp().add(experience);
     }
 
+    //this adds an education to the users education list
     public void add(Education education) {
-        if (education.startDate != null)
-            resume.historyEducation.add(education);
+        if (education.getStartDate() != null)
+            getHisEdu().add(education);
     }
 
+    //this method returns the mean Gpa of the consumer
     public Double meanGPA() {
         double sumOfGpa = 0;
-        for (Education education : resume.historyEducation)
-            sumOfGpa += education.finalGPA;
+        for (Education education : getHisEdu())
+            sumOfGpa += education.getFinalGPA();
 
-        return sumOfGpa / resume.historyEducation.size();
+        return sumOfGpa / getHisEdu().size();
     }
 
+    //this method returns the year of graduation from college
+    //and if they didn't graduate yet it will return 0
     public int getGraduationYear() {
-        for (Education education : resume.historyEducation)
-            if (education.educationLevel.compareTo("college") == 0)
-                if (education.endDate != null)
-                    return education.endDate.getYear();
+        for (Education education : getHisEdu())
+            if (education.getEducationLevel().compareTo("college") == 0)
+                if (education.getEndDate() != null)
+                    return education.getEndDate().getYear();
         return 0;
+    }
+
+    /*
+    Here i calculate the experience of an user
+    i sum the time periods into an auxiliary time date
+    and then i aproximate the years by the number of months
+    in specific with 3 months
+    */
+    public int getExperienceTime() {
+        LocalDate dateSum = LocalDate.of(0,1,1);
+        LocalDate auxiliarDate = LocalDate.of(LocalDate.now().getYear(),
+                LocalDate.now().getMonthValue(),
+                LocalDate.now().getDayOfMonth());
+        long nrDays;
+        for (Experience experience : getHisExp()) {
+            if (experience.getEndDate() == null) {
+                nrDays = Period.between(experience.getStartDate(), auxiliarDate).toTotalMonths();
+                dateSum = dateSum.plusDays(nrDays);
+            } else {
+                nrDays = Period.between(experience.getStartDate(), experience.getEndDate()).toTotalMonths();
+                dateSum = dateSum.plusMonths(nrDays);
+                dateSum = dateSum.plusDays(experience.getStartDate().getDayOfMonth() - experience.getEndDate().getDayOfMonth());
+            }
+        }
+        /*
+        i comparre with 4 and not with 3 because my auxiliar
+         date starts at 1 month, i also remove the extra day
+        from the auxiliar date
+        */
+        dateSum = dateSum.minusDays(1);
+        if (dateSum.getMonthValue() >= 4)
+            return (dateSum.plusYears(1)).getYear();
+        return dateSum.getYear();
     }
 
     /*
@@ -60,61 +98,90 @@ abstract class Consumer {
     So we have to parse the friends lists and build a string
     with their names
     */
-    public String showFriendsList() {
+    public String showFriends() {
         String aux = "";
         for (Consumer consumer : friendList)
-            aux += " " + consumer.resume.information.getName()
-                    + " " + consumer.resume.information.getFirstName();
+            aux += " " + consumer.resume.getInfo().getName()
+                    + " " + consumer.resume.getInfo().getFirstName();
         return aux;
+    }
+    //Setter and getter section
+    public Resume getRes() {return resume;}
+    public void setResume(Resume resume) {this.resume = resume;}
+    //this method is used for easier access to the users name
+    public String getName() {
+        return resume.getInfo().getName();
+    }
+    //this method is used for easier access to the first name of the user
+    public String getFirstName() {
+        return resume.getInfo().getFirstName();
+    }
+    public ArrayList<Consumer> getFriends() {return friendList;}
+    //this returns a consumer from the friends list using an index
+    public Consumer getFriends(int i) {
+        if (friendList.size() <= i) {
+            return null;
+        }
+        return friendList.get(i);
+    }
+
+    //I use this "getter" for better easier access to the resume experience list
+    public TreeSet<Experience> getHisExp() {
+        return resume.getHisExp();
+    }
+    //I use this "getter" for better easier access to the resume education list
+    public TreeSet<Education> getHisEdu() {
+        return resume.getHisEdu();
     }
 
     /*
-    we parse the "graph" iteratively we have a vector
-    that keeps in memory what we already have gone over
-    and a vector that does the same, just that it keeps
-    consumers we have to search through, the vectors
-    work like a Queue in logic because of the need
-    to perform a BFS
+    I parse the "graph" iteratively, I have an arraylist
+    that keeps in memory what consumers we already have gone through
+    and a arraylist that keeps track of the consumers that we already parsed
+
+    I keep track of the depth at which I am with the second while
+    because we are continuously adding to the array toParse
+    I have to always take the size of the array before I
+    start parsing it, if i then finish moving through that
+    //size I increment the depth
+
+    If i find the searched for consumer i return the depth at which i found him
+    and if not i return a very large number.
     */
     public int getDegreeInFriendship(Consumer consumer) {
-        //this will represent the current consumer at which we are
-        //at the moment
-        Consumer consumerBase;
-        //this is a vector of consumers that we still have to move through
-        Vector<Consumer> consumerToParse = new Vector<>();
-        //these are consumers that we moved through
-        Vector<Consumer> alreadyParsed = new Vector<>();
-        int depth = 0;
-        //we are the first consumers to parse through
-        consumerToParse.add(this);
-        //the null element will be used to represent the level at which we are
-        //and will be added every time we find another null value
-        consumerToParse.add(null);
-        while (consumerToParse.size() != 1) {
-            consumerBase = consumerToParse.get(0);
-            consumerToParse.remove(0);
-            //we went down a level
-            if (consumerBase == null) {
-                consumerToParse.remove(null);
-                consumerToParse.add(null);
-                depth++;
-                continue;
-            }
-            //we add to the parsed list after we verify if
-            //the consumer is not the null we added for the
-            //depth calculation
-            alreadyParsed.add(consumerBase);
-            //if we found what we searched for
-            if (consumerBase.equals(consumer))
-                return depth;
-            else {
-                for (Consumer auxConsumers : consumerBase.friendList) {
-                    if (!alreadyParsed.contains(auxConsumers))
-                        consumerToParse.add(auxConsumers);
+        ArrayList<Consumer> friendsParsed = new ArrayList<>();
+        ArrayList<Consumer> friendsToParse = new ArrayList<>();
+        int depth = 0, size;
+        friendsToParse.add(this);
+        while(friendsToParse.size() > 0) {
+            //here is where i keep track of the original size of
+            // the toParse array
+            size = friendsToParse.size();
+            while (size > 0) {
+                //if i find him
+                if (friendsToParse.get(0).equals(consumer))
+                    return depth;
+                else {
+                    //if not i keep searching
+                    //i add all the consumers friends that
+                    // don't already exist in the array toParse
+                    size--;
+                    for (Consumer consumer1 : friendsToParse.get(0).friendList) {
+                        if (!friendsToParse.contains(consumer1) &&
+                                !friendsParsed.contains(consumer1))
+                            friendsToParse.add(consumer1);
+                    }
+                    //I add the consumer through which i just went over
+                    //to the alreadyParsed array
+                    if(!friendsParsed.contains(friendsToParse.get(0)))
+                        friendsParsed.add(friendsToParse.get(0));
+                    //i remove him from the array toParse
+                    friendsToParse.remove(0);
                 }
             }
+            depth++;
         }
-        //we didn't find a path to the desired consumer
+
         return 10000;
     }
 }

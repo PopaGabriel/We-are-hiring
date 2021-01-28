@@ -7,31 +7,22 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 
 public class CompanyRenderer extends JPanel implements ListCellRenderer<Company> {
-    JLabel name = new JLabel();
-    JLabel openJobs = new JLabel();
-    JLabel nrEmployees = new JLabel();
+    private final JLabel name = new JLabel();
+
     @Override
     public Component getListCellRendererComponent(JList<? extends Company> list, Company comp, int index, boolean isSelected, boolean cellHasFocus) {
-        setLayout(new GridLayout(3,1));
-        setBorder(new LineBorder(Color.CYAN, 1, true));
+        setLayout(new FlowLayout());
+        setBorder(new LineBorder(StaticColorsPalet.getColorCellCorner(),
+                1, true));
 
-        name.setText("Name of company: "+comp.nameOfCompany);
+        name.setText("Name of company: "+comp.getName());
         add(name);
 
-        openJobs.setText("Number of open jobs: " + comp.getJobs().size());
-        add(openJobs);
+        if(isSelected)
+            setBackground(StaticColorsPalet.getColorCellSelect());
+        else
+            setBackground(StaticColorsPalet.getColorCellIdle());
 
-        int employeesNumber = 0;
-        for(int i = 0; i < comp.departmenteArrayList.size(); i++)
-            employeesNumber += comp.departmenteArrayList
-                    .get(i).employeeArrayList.size();
-            nrEmployees.setText("Number of employees: " + employeesNumber);
-            add(nrEmployees);
-
-            if(isSelected)
-                setBackground(Color.ORANGE);
-            else
-                setBackground(Color.GRAY);
         return this;
     }
 }

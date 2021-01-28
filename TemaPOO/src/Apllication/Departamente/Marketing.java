@@ -13,12 +13,12 @@ public class Marketing extends Department {
     public Double getTotalSalaryBudget() {
         double budget = 0.0;
         for(Employee employee : getEmployees()) {
-            if(employee.salary > 5000.0)
-                budget += employee.salary * 100 / 90;
-            else if (employee.salary < 3000)
-                budget += employee.salary;
+            if(employee.getSal() > 5000.0)
+                budget += employee.getSal() * 100 / 90;
+            else if (employee.getSal() < 3000)
+                budget += employee.getSal();
             else
-                budget += employee.salary * 100 / 84;
+                budget += employee.getSal() * 100 / 84;
         }
         return budget;
     }

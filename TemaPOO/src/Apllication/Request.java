@@ -31,11 +31,22 @@ public class Request<K, V> implements Comparable {
     public String toString() {
         return "Key: " + key + " ; Value1: " + value1 + " ; Value2: " + value2 + ";  Score: " + "" + score;
     }
+    //getter methods for easier access to the data
+    public int getNoPos() {
+        return ((Job)key).getNoPositions();
+    }
+    public int getFlag() {
+        return ((Job)key).getFlag();
+    }
+    public Double getSal() {
+        return ((Job)key).getSal();
+    }
 
     //We sort them in a decreasing manner based on their score
+    //such that the highest rated users are at the top of the tree set
     @Override
     public int compareTo(Object o) {
-        if (((Request) o).score != score)
+        if (((Request) o).score.compareTo(score) != 0)
             return ((Request) o).score.compareTo(score);
         return 1;
     }

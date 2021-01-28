@@ -4,90 +4,136 @@ import Apllication.Exceptions.InvalidDatesException;
 
 import java.time.LocalDate;
 
-public class Education implements Comparable {
-    public LocalDate startDate;
-    public LocalDate endDate;
-    public String nameOfInstitution;
-    public String educationLevel;
-    public Double finalGPA;
-
-    public Education(String startString, String endString, Double finalGPA,
-                     String nameOfInstitution, String educationLevel) {
+public class Education implements Comparable<Education> {
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private String name;
+    private String eduLevel;
+    private Double finalGPA;
+    private Education(EduBuilder eduBuilder) {
         try {
-            //if he didn't even start than it is an error
-            if (startString == null)
-                throw new InvalidDatesException("startDate is null");
-
-            String[] startDateInput = startString.split("\\.");
-            startDate = LocalDate.of(AuxiliarMethods.changeSToI(startDateInput[2]),
-                    AuxiliarMethods.changeSToI(startDateInput[1]),
-                    AuxiliarMethods.changeSToI(startDateInput[0]));
-            //if he is still studying
-            if (endString == null) {
-                endDate = null;
-                this.finalGPA = finalGPA;
-                this.nameOfInstitution = nameOfInstitution;
-                this.educationLevel = educationLevel;
-                return;
-            }
-            //if he finalised his studies we calculate his end date
-            String[] endDateInput = endString.split("\\.");
-            endDate = LocalDate.of(AuxiliarMethods.changeSToI(endDateInput[2]),
-                    AuxiliarMethods.changeSToI(endDateInput[1]),
-                    AuxiliarMethods.changeSToI(endDateInput[0]));
-            //then we compare it to the start date
-            if (startDate.compareTo(endDate) > 0)
-                throw new InvalidDatesException("StartDate is higher than EndDate");
-
-            this.nameOfInstitution = nameOfInstitution;
-            this.educationLevel = educationLevel;
-            this.finalGPA = finalGPA;
-
+            startDate = eduBuilder.startDate;
+            endDate = eduBuilder.endDate;
+            name = eduBuilder.name;
+            eduLevel = eduBuilder.eduLevel;
+            finalGPA = eduBuilder.finalGPA;
+            if (startDate == null)
+                throw  new InvalidDatesException("startDate is null");
+            if (endDate != null)
+                if(startDate.isAfter(endDate))
+                    throw new InvalidDatesException("StartDate is higher than EndDate");
         } catch (InvalidDatesException e) {
-            System.out.println("Bad input, try again!");
             startDate = null;
+            System.out.println("InvalidDate my guy");
         }
-    }
 
+    }
+    //getter and setter section
     public void setNameOfInstitution(String nameOfInstitutionAux) {
-        nameOfInstitution = nameOfInstitutionAux;
+        name = nameOfInstitutionAux;
     }
-
     public String getNameOfInstitution() {
-        return nameOfInstitution;
+        return name;
     }
-
     public void setEducationLevel(String educationLevel) {
-        this.educationLevel = educationLevel;
+        this.eduLevel = educationLevel;
     }
-
     public String getEducationLevel() {
-        return educationLevel;
+        return eduLevel;
     }
-
     public void setFinalGPA(Double finalGPAAux) {
         finalGPA = finalGPAAux;
     }
-
     public Double getFinalGPA() {
         return finalGPA;
     }
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+    public String getName() {
+        return name;
+    }
+
+    public static class EduBuilder {
+        private LocalDate startDate;
+        private LocalDate endDate;
+        private String name;
+        private String eduLevel;
+        private Double finalGPA;
+
+        public EduBuilder() {
+            startDate = null;
+            endDate = null;
+        }
+        public EduBuilder name(String name) {
+         this.name = name;
+         return this;
+        }
+        public EduBuilder finalGpa(Double val) {
+            finalGPA = val;
+            return this;
+        }
+        public EduBuilder finalGpa(String val) {
+            finalGPA = Double.parseDouble(val);
+            return this;
+        }
+        public EduBuilder eduLevel(String val) {
+            eduLevel = val;
+            return this;
+        }
+        public EduBuilder startDate(LocalDate value) {
+            startDate = value;
+            return this;
+        }
+        public EduBuilder startDate(String value) {
+            if (value == null || value.compareTo("null") == 0) {
+                startDate = null;
+                return this;
+            }
+            String[] startDateInput = value.split("\\.");
+            startDate = LocalDate.of(Integer.parseInt(startDateInput[2]),
+                    Integer.parseInt(startDateInput[1]),
+                    Integer.parseInt(startDateInput[0]));
+            return this;
+        }
+        public EduBuilder endDate(LocalDate value) {
+            endDate = value;
+            return this;
+        }
+        public EduBuilder endDate(String value) {
+            if (value == null || value.compareTo("null") == 0) {
+                endDate = null;
+                return this;
+            }
+            String[] startDateInput = value.split("\\.");
+            endDate = LocalDate.of(Integer.parseInt(startDateInput[2]),
+                    Integer.parseInt(startDateInput[1]),
+                    Integer.parseInt(startDateInput[0]));
+            return this;
+        }
+        public Education build() {
+            return new Education(this);
+        }
+    }
 
     public String toString() {
-        return "Institution: " + nameOfInstitution + "\n Final Gpa: " + finalGPA +
-                "\n Time passed: " + startDate + " " + endDate + "\n Education level: " +
-                educationLevel + "\n";
+        return "Institution: " + name + " Final Gpa: " + finalGPA +
+                " Time passed: " + startDate + " " + endDate + "\n";
     }
 
+    //i always want to have the unfinished studies at the top
     @Override
-    public int compareTo(Object o) {
-        //if they didn't end their studies than it should compare start dates
-        if (endDate == null || ((Education) o).endDate == null)
-            return startDate.compareTo(((Education) o).startDate);
-        if (endDate.compareTo(((Education) o).endDate) == 0) {
-            return (int) (((Education) o).finalGPA - finalGPA);
+    public int compareTo(Education o) {
+        if (o.endDate == null)
+            return 1;
+        if (endDate == null)
+            return -1;
+        if (endDate.compareTo(o.endDate) == 0) {
+            return (int) (o.finalGPA - finalGPA);
         }
-        return ((Education) o).endDate.compareTo(endDate);
+        return o.endDate.compareTo(endDate);
     }
-
 }

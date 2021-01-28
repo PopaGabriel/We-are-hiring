@@ -2,12 +2,11 @@ package Apllication;
 
 import Apllication.Interfaces.Observer;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class User extends Consumer implements Observer {
-    ArrayList<String> listWantedCompany;
-    ArrayList<String> notifiStack;
+    private ArrayList<String> listWantedCompany;
+    private ArrayList<Notifi> notifiStack;
 
     public User() {
         super();
@@ -16,71 +15,65 @@ public class User extends Consumer implements Observer {
     }
 
     @Override
-    public void update(String mess) {
-        notifiStack.add(mess);
+    public void update(Notifi notifi) {
+        notifiStack.add(notifi);
+    }
+    //Setter and getter section
+    public ArrayList<String> getWantCom() {
+        return listWantedCompany;
+    }
+    public Boolean contains(String nameOfCom) {
+        return listWantedCompany.contains(nameOfCom);
+    }
+    public void setLWantCom(ArrayList<String> arrayList) {
+        listWantedCompany = arrayList;
+    }
+    public ArrayList<Notifi> getNotifiStack() {
+        return notifiStack;
+    }
+    public void setNotifiStack(ArrayList<Notifi> notifiStack) {
+        this.notifiStack = notifiStack;
+    }
+    //i add the interested company to the array
+    public void add (String nameComp) {
+        if(!contains(nameComp))
+            listWantedCompany.add(nameComp);
     }
 
-    //we have to remove him from the list of his friends
-    //and add him again after that as an employee object
-    public void updateFriendList(Employee employee) {
-        ArrayList<Consumer> listAux = friendList;
-        for (int i = 0; i < listAux.size(); i++) {
-            employee.add(friendList.get(i));
-            friendList.get(i).remove(this);
-        }
-    }
-
+    /*
+        I remove him from the user list of the application
+        than update his friends list and copy his old resume
+        whilst making his wanted companies null
+        because he no longer searching for a job
+    */
     public Employee convert() {
 
         Application app = Application.getInstance();
-        app.userList.remove(this);
-
         Employee employee = new Employee();
-        employee.listWantedCompany = null;
-        employee.resume = resume;
-        updateFriendList(employee);
-        return employee;
-    }
+        employee.setLWantCom(null);
+        employee.setResume(getRes());
+        employee.setNotifiStack(getNotifiStack());
 
-    //Here i calculate the experience of an user
-    public int getExperienceTime() {
-        int totalYears = 0, years, month;
-        LocalDate now;
-        for (Experience experience : resume.historyExperience) {
-            if (experience.endDate == null) {
-                now = LocalDate.now();
-                years = now.getYear() - experience.startDate.getYear();
-                month = now.getMonthValue() - experience.startDate.getMonthValue();
-                //if the month is lower than 0 we will just sum the year that we got as
-                //a result, because a minus month represents a plus month in the other year
-                if (month > 3)
-                    years++;
-                else if (month == 3)
-                    if ((now.getDayOfMonth() - experience.startDate.getDayOfMonth()) > 0)
-                        years++;
-
-            } else {
-                years = experience.endDate.getYear() - experience.startDate.getYear();
-                month = experience.endDate.getMonthValue() - experience.startDate.getMonthValue();
-
-                if (month > 3)
-                    years++;
-                else if (month == 3)
-                    if ((experience.endDate.getDayOfMonth()
-                            - experience.startDate.getDayOfMonth()) >= 0)
-                        years++;
-            }
-            totalYears += years;
+        /*
+        I update his friends because if i don't
+        they will have the old user as a friend
+        whilst i need them to befriend the new employee
+        */
+        for (int i = 0; i < getFriends().size();) {
+            employee.add(getFriends().get(i));
+            getFriends().get(i).remove(this);
         }
-        return totalYears;
-    }
+        app.remove(this);
 
+        return employee;
+
+    }
+    //i return the score using the given formula
     public Double getTotalScore() {
         return getExperienceTime() * 1.5 + meanGPA();
     }
-
     public String toString() {
-        return resume + " Friends: " + showFriendsList() + " Wanted Companies: "
+        return getRes() + " Friends: " + showFriends() + " Wanted Comp: "
                 + listWantedCompany + " \n";
     }
 }

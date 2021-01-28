@@ -1,0 +1,93 @@
+{
+  "friend_connec": [
+    {
+      "name": "Daniel_Edmund",
+      "friends": [
+        "Julia_Matvei",
+        "Leyla_Stacy"
+      ]
+    },
+    {
+      "name": "Julia_Matvei",
+      "friends": [
+        "Jonie_Phillip",
+        "Daniel_Edmund",
+        "Steward_Goodwin"
+      ]
+    },
+    {
+      "name": "Tamara_Haci",
+      "friends": [
+        "Linette_Spartak",
+        "Leyla_Stacy"
+      ]
+    },
+    {
+      "name": "Linette_Spartak",
+      "friends": [
+        "Tamara_Haci",
+        "Bryson_Reenie"
+      ]
+    },
+    {
+      "name": "Shana_Addy",
+      "friends": [
+        "Darrell_Lillie",
+        "Bryson_Reenie"
+      ]
+    },
+    {
+      "name": "Leyla_Stacy",
+      "friends": [
+        "Daniel_Edmund",
+        "Rolland_Lyla",
+        "Janine_Woody",
+        "Tamara_Haci"
+      ]
+    },
+    {
+      "name": "Rolland_Lyla",
+      "friends": [
+        "Leyla_Stacy",
+        "Damian_Bodhi"
+      ]
+    },
+    {
+      "name": "Bryson_Reenie",
+      "friends": [
+        "Linette_Spartak",
+        "Shana_Addy"
+      ]
+    },
+    {
+      "name": "Steward_Goodwin",
+      "friends": [
+        "Julia_Matvei"
+      ]
+    },
+    {
+      "name": "Joni_Phillip",
+      "friends": [
+        "Julia_Matvei"
+      ]
+    },
+    {
+      "name": "Janin_Woody",
+      "friends": [
+        "Leyla_Stacy"
+      ]
+    },
+    {
+      "name": "Darrell_Lillie",
+      "friends": [
+        "Shana_Addy"
+      ]
+    },
+    {
+      "name": "Damian_Bodhi",
+      "friends": [
+        "Rolland_Lyla"
+      ]
+    }
+  ]
+}

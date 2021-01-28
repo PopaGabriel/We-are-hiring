@@ -14,6 +14,17 @@ public class Constraint {
         inferiorLimit = null;
     }
 
+    //this method checks if the value respects the set requirements
+    public Boolean meetsConstraint(Double value) {
+            if (inferiorLimit != null)
+                if (inferiorLimit > value)
+                    return false;
+            if (superiorLimit != null)
+                if (superiorLimit < value)
+                    return false;
+
+        return true;
+    }
     @Override
     public String toString() {
         return inferiorLimit + " - " + superiorLimit + '}';

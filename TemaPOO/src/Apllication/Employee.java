@@ -3,62 +3,83 @@ package Apllication;
 import java.util.ArrayList;
 
 public class Employee extends User {
-    public String companyName;
-    public Double salary;
+    private String companyName;
+    private Double salary;
 
     public Employee() {
         super();
     }
 
-    public String getCompanyName() {
-        for (Experience experience : resume.historyExperience)
-            if (experience.endDate == null)
-                return experience.nameOfCompany;
-        return null;
-    }
-
+    //converts an employee to a recruiter
     public Recruiter convert() {
         Recruiter recruiter = new Recruiter();
-        recruiter.resume = resume;
-        for (Consumer consumer : friendList) {
-            consumer.add(recruiter);
-            consumer.remove(this);
-            //System.out.println(recruiter.showFriendsList());
+        recruiter.setResume(getRes());
+        recruiter.setSalary(salary);
+        recruiter.setCompanyName(companyName);
+        recruiter.setNotifiStack(getNotifiStack());
+        for (int i = 0; i < getFriends().size();) {
+            recruiter.add(getFriends().get(i));
+            getFriends().get(i).remove(this);
         }
 
-        recruiter.salary = salary;
-        recruiter.companyName = companyName;
         return recruiter;
     }
 
     public Manager convertToM() {
         Manager manager = new Manager();
-        manager.resume = resume;
-        manager.salary = salary;
-        manager.companyName = companyName;
-
-        for (Consumer consumer : friendList) {
+        manager.setResume(getRes());
+        manager.setSalary(salary);
+        manager.setCompanyName(companyName);
+        manager.setNotifiStack(getNotifiStack());
+        //possible error incoming here because of the foreach
+        //combined with remove
+        for (Consumer consumer : getFriends()) {
             consumer.remove(this);
             consumer.add(manager);
         }
         return manager;
     }
 
+    //this method is used when you fire an employee/recruiter from a cpmpany
+    //because he will be added tot the user pool
     public User convertToU() {
         User user = new User();
-        Consumer consumer;
-        user.resume = resume;
-        ArrayList<Consumer> listAux = friendList;
-        for (int i = 0; i < listAux.size(); i++) {
-            consumer = friendList.get(i);
-            consumer.remove(this);
-            consumer.add(user);
+        user.setResume(getRes());
+        user.setNotifiStack(getNotifiStack());
+
+        for (int i = 0; i < getFriends().size();) {
+            user.add(getFriends().get(i));
+            getFriends().get(i).remove(this);
         }
         return user;
     }
 
+    //setter and getter section
+    public void setSalary(Double sal) {
+        salary = sal;
+    }
+    public Double getSal() {
+        return salary;
+    }
+    public String getCompName() {
+        return  companyName;
+    }
+    public void setCompanyName(String compName) {
+        companyName = compName;
+    }
+    public String getCompanyName() {return companyName;}
+    /*
+    this returns the current job
+    this works because the current job is always
+     the first element in the tree set
+    */
+    public Experience getCurrentJob() {
+        return getHisExp().first();
+    }
+
+
     public String toString() {
-        return " CompanyName " + companyName +
-                " Salary " + salary + " " + super.toString();
+        return " CompanyName " + companyName + " Salary " + salary + " "
+                + super.toString();
     }
 }

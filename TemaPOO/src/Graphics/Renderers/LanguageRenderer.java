@@ -7,25 +7,21 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 
 public class LanguageRenderer extends JPanel implements ListCellRenderer<Language> {
-    JLabel languageLevelLabel = new JLabel();
-    JLabel languageNameLabel = new JLabel();
+    private final JLabel langLabel = new JLabel();
 
     @Override
     public Component getListCellRendererComponent(JList<? extends Language> list, Language language, int index, boolean isSelected, boolean cellHasFocus) {
+        setLayout(new FlowLayout());
+        setBorder(new LineBorder(StaticColorsPalet.getColorCellCorner()
+                ,1, true));
 
-        setLayout(new GridLayout(1,2));
-        setBorder(new LineBorder(Color.orange, 1, true));
-
-        languageNameLabel.setText(language.getNameOfLanguage());
-        add(languageNameLabel);
-
-        languageLevelLabel.setText("Level: "+language.getLevel());
-        add(languageLevelLabel);
+        langLabel.setText(language.getName() + " - " + language.getLevel());
+        add(langLabel);
 
         if(isSelected)
-            setBackground(Color.CYAN);
+            setBackground(StaticColorsPalet.getColorCellSelect());
         else
-            setBackground(Color.GRAY);
+            setBackground(StaticColorsPalet.getColorCellIdle());
 
         return this;
     }

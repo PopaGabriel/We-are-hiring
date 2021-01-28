@@ -1,0 +1,56 @@
+{
+  "Companies": [
+    {
+      "name": "Google",
+      "IT": [
+        {
+          "name": "Software Developer Engineer",
+          "noPositions": "1",
+          "salary": "10000",
+          "flag":  "1",
+          "graduationYearConstraint": "2002-2020",
+          "experience": "2-6",
+          "average": "8.0-null"
+        },
+        {
+          "name": "Software Developer Engineer Intern",
+          "noPositions": "1",
+          "salary": "5000",
+          "flag":  "1",
+          "graduationYearConstraint": "null-null",
+          "experience": "0-2",
+          "average": "9.0-null"
+        }
+      ],
+      "Marketing": [],
+      "Management": [],
+      "Finance": []
+    },
+    {
+      "name": "Amazon",
+      "IT": [
+        {
+          "name": "Software Developer Engineer",
+          "noPositions": "1",
+          "salary": "12000",
+          "flag":  "1",
+          "graduationYearConstraint": "2014-2020",
+          "experience": "1-null",
+          "average": "9.0-null"
+        },
+        {
+          "name": "Software Developer Engineer Intern",
+          "noPositions": "1",
+          "salary": "6000",
+          "flag":  "1",
+          "graduationYearConstraint": "null-null",
+          "experience": "0-2",
+          "average": "9.35-null"
+        }
+      ],
+      "Marketing": [],
+      "Management": [],
+      "Finance": []
+    }
+  ]
+}

@@ -1,5 +1,7 @@
 package Apllication.Interfaces;
 
+import Apllication.Notifi;
+
 public interface Observer {
-    void update(String mess);
+    void update(Notifi notifi);
 }

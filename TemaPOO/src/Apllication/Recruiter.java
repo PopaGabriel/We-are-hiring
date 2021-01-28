@@ -1,27 +1,29 @@
 package Apllication;
 
 public class Recruiter extends Employee {
-    public Double rating;
-
-    //this is exclusevely for testing purposes
-    public Recruiter(String s) {
-        super();
-        this.resume.information.setName(s);
-        rating = 5.0;
-    }
+    private Double rating;
 
     public Recruiter() {
         super();
         rating = 5.0;
     }
 
-    public int evaluate(Job job, User user) {
+    public Double getRat() {
+        return rating;
+    }
 
+    //he evaluates if the given user gets past the job requirements
+    //and if he does he sends a request to the manager
+    public int evaluate(Job job, User user) {
         Application app = Application.getInstance();
-        Company company = app.getCompany(companyName);
-        Double score = rating * user.getTotalScore();
+
         rating += 0.1;
-        company.manager.add(new Request(job, user, this, score));
+        if(!job.meetsRequirments(user))
+            return -1;
+
+        Company company = app.getCompany(getCompanyName());
+        Double score = rating * user.getTotalScore();
+        company.getMan().add(new Request<>(job, user, this, score));
         return (int) (rating * user.getTotalScore());
     }
 }

@@ -7,28 +7,25 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 
 public class UserRenderer extends JPanel implements ListCellRenderer<User> {
-    JLabel name = new JLabel();
-    JLabel finalGPA = new JLabel();
-    JLabel totalScore = new JLabel();
+    private final JLabel name = new JLabel();
+    private final JLabel totalScore = new JLabel();
     @Override
     public Component getListCellRendererComponent(JList<? extends User> list, User user, int index, boolean isSelected, boolean cellHasFocus) {
 
-        setLayout(new GridLayout(3,1));
-        setBorder(new LineBorder(Color.CYAN, 1, true));
+        setLayout(new GridLayout(2,1));
+        setBorder(new LineBorder(StaticColorsPalet.getColorCellCorner()
+                , 1, true));
 
-        name.setText("Name: " + user.resume.information.getName() +" "+user.resume.information.getFirstName());
-        add(name);
-
-        finalGPA.setText("Final GPA: " + user.meanGPA());
-        add(finalGPA);
-
+        name.setText("Name: " + user.getName() +" "+user.getFirstName());
         totalScore.setText("Total Score: " + user.getTotalScore());
+
+        add(name);
         add(totalScore);
 
         if(isSelected)
-            setBackground(Color.ORANGE);
+            setBackground(StaticColorsPalet.getColorCellSelect());
         else
-            setBackground(Color.GRAY);
+            setBackground(StaticColorsPalet.getColorCellIdle());
 
         return this;
     }

@@ -9,28 +9,28 @@ import java.awt.*;
 import java.util.concurrent.Flow;
 
 public class ExperienceRenderer extends JPanel implements ListCellRenderer<Experience> {
-    JLabel nameOfCompany = new JLabel();
-    JLabel workPeriod = new JLabel();
-    JLabel position = new JLabel();
+    private final JLabel nameOfCompany = new JLabel();
+    private final JLabel workPeriod = new JLabel();
+    private final JLabel position = new JLabel();
     @Override
     public Component getListCellRendererComponent(JList<? extends Experience> list, Experience experience, int index, boolean isSelected, boolean cellHasFocus) {
         setLayout(new GridLayout(3,1));
-        setBorder(new LineBorder(Color.orange, 1, true));
+        setBorder(new LineBorder(StaticColorsPalet.getColorCellCorner()
+                , 1, true));
 
-        nameOfCompany.setText("Name of the company: "+experience.nameOfCompany);
+        nameOfCompany.setText("Name of the company: "+experience.getNameOfCompany());
+        workPeriod.setText("\nWork Period: "+ experience.getStartDate() + " - " + experience.getEndDate());
+        position.setText("\nPosition: " + experience.getPosition());
+
         add(nameOfCompany);
-
-        workPeriod.setText("\nWork Period: "+ experience.startDate + " - " + experience.endDate);
-        add(workPeriod);
-
-        position.setText("\nPosition: " + experience.position);
         add(position);
+        add(workPeriod);
 
 
         if (isSelected)
-            setBackground(Color.CYAN);
+            setBackground(StaticColorsPalet.getColorCellSelect());
         else
-            setBackground(Color.GRAY);
+            setBackground(StaticColorsPalet.getColorCellIdle());
         return this;
     }
 }
